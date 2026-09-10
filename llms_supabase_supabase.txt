@@ -1,0 +1,392 @@
+### Set up the Supabase CLI
+
+Source: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2025-08-17-the-vibe-coders-guide-to-supabase-environments.mdx
+
+Install the Supabase CLI as a development dependency and initialize the Supabase project directory.
+
+```bash
+npm install supabase --save-dev
+supabase init
+```
+
+--------------------------------
+
+### Supabase Database Schema and Storage Policies
+
+Source: https://github.com/supabase/supabase/blob/master/examples/user-management/flutter-user-management/README.md
+
+This SQL script defines the `profiles` table with row-level security policies, sets up Realtime for the `profiles` table, and configures a storage bucket for avatars with public access policies.
+
+```sql
+-- Create a table for public "profiles"
+create table profiles (
+  id uuid references auth.users not null,
+  updated_at timestamp with time zone,
+  username text unique,
+  avatar_url text,
+  website text,
+
+  primary key (id),
+  unique(username),
+  constraint username_length check (char_length(username) >= 3)
+);
+
+alter table profiles enable row level security;
+
+create policy "Public profiles are viewable by everyone."
+  on profiles for select
+  using ( true );
+
+create policy "Users can insert their own profile."
+  on profiles for insert
+  with check ( (select auth.uid()) = id );
+
+create policy "Users can update own profile."
+  on profiles for update
+  using ( (select auth.uid()) = id );
+
+-- Set up Realtime!
+begin;
+  drop publication if exists supabase_realtime;
+  create publication supabase_realtime;
+commit;
+alter publication supabase_realtime add table profiles;
+
+-- Set up Storage!
+insert into storage.buckets (id, name)
+values ('avatars', 'avatars');
+
+create policy "Avatar images are publicly accessible."
+  on storage.objects for select
+  using ( bucket_id = 'avatars' );
+
+create policy "Anyone can upload an avatar."
+  on storage.objects for insert
+  with check ( bucket_id = 'avatars' );
+```
+
+--------------------------------
+
+### Create Storage Bucket for Avatars (SQL)
+
+Source: https://github.com/supabase/supabase/blob/master/apps/docs/content/_partials/user_management_quickstart_sql_template.mdx
+
+Initializes a new storage bucket named 'avatars' within Supabase Storage to store user avatar images.
+
+```sql
+-- Set up Storage!
+insert into storage.buckets (id, name)
+  values ('avatars', 'avatars');
+```
+
+--------------------------------
+
+### Basic Supabase Swift Interaction
+
+Source: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2024-04-15-supabase-swift.mdx
+
+Example demonstrating how to initialize the Supabase client and fetch data from a 'countries' table using Supabase Swift.
+
+```swift
+let url = URL(string: "...")!
+let anonKey = "public-anon-key"
+let client = SupabaseClient(supabaseURL: url, supabaseKey: anonKey)
+
+struct Country: Decodable {
+  let id: Int
+  let name: String
+}
+
+let countries: [Country] = try await supabase.from("countries")
+  .select()
+  .execute()
+  .value
+```
+
+--------------------------------
+
+### Initialize Supabase client
+
+Source: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/realtime/postgres-changes.mdx
+
+Create a Supabase client instance using your project URL and public API key.
+
+```js
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  'https://<project>.supabase.co',
+  '<sb_publishable_... key>'
+)
+```
+
+--------------------------------
+
+### Initialize and Link Supabase Project
+
+Source: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2025-12-17-building-chatgpt-apps-with-supabase.mdx
+
+Sets up Supabase in the local project, authenticates with Supabase, and links the local repository to a remote Supabase project using its reference ID.
+
+```bash
+supabase init
+supabase login
+supabase link --project-ref YOUR_PROJECT_ID
+```
+
+--------------------------------
+
+### Initialize Supabase client in React
+
+Source: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2021-03-31-supabase-cli.mdx
+
+Example of how to import and initialize the Supabase client in a React application using local Supabase URL and anonymous key.
+
+```jsx
+import { createClient } from '@supabase/supabase-js'
+
+const SUPABASE_URL = 'http://localhost:8000'
+const SUPABASE_ANON_KEY =
+  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzdXBhYmFzZSIsImlhdCI6MTYwMzk2ODgzNCwiZXhwIjoyNTUwNjUzNjM0LCJyb2xlIjoiYW5vbiJ9.36fUebxgx1mcBo4s19v0SzqmzunP--hm_hep0uLX0ew'
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+```
+
+--------------------------------
+
+### Install @supabase/server
+
+Source: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/getting-started/tutorials/with-nuxt-3.mdx
+
+Installs the @supabase/server package to enable server-side session validation and request middleware.
+
+```bash
+npm install @supabase/server
+```
+
+--------------------------------
+
+### Initialize a new Supabase project directory with supabase init
+
+Source: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/functions/quickstart.mdx
+
+Creates a new directory and initializes Supabase local configuration. Creates a supabase directory containing config.toml.
+
+```bash
+mkdir my-edge-functions-project
+cd my-edge-functions-project
+supabase init
+```
+
+--------------------------------
+
+### Read Access Policy for a Subfolder
+
+Source: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2021-03-30-supabase-storage.mdx
+
+SQL policy to grant read access to objects within the 'public' subfolder of the 'avatars' bucket.
+
+```sql
+create policy "Read access for public avatars."
+on storage.objects for select using (
+	bucket_id = 'avatars'
+	and (storage.foldername(name))[1] = 'public'
+);
+```
+
+--------------------------------
+
+### Install Supabase JS
+
+Source: https://github.com/supabase/supabase/blob/master/examples/with-cloudflare-workers/README.md
+
+Command to install the Supabase JS NPM package.
+
+```bash
+npm i @supabase/supabase-js
+```
+
+--------------------------------
+
+### Create a new Supabase function
+
+Source: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/functions/ai-models.mdx
+
+Initialize a new function project locally.
+
+```bash
+supabase functions new llamafile-test
+```
+
+--------------------------------
+
+### Read Access Policy for a Bucket
+
+Source: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2021-03-30-supabase-storage.mdx
+
+SQL policy to grant read access to all objects within the 'avatars' bucket.
+
+```sql
+create policy "Read access for avatars."
+on storage.objects for select using (
+	bucket_id = 'avatars'
+);
+```
+
+--------------------------------
+
+### supabase test
+
+Source: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2023-08-08-supabase-local-dev.mdx
+
+Run tests on local Supabase containers.
+
+```markdown
+supabase test
+Run tests on local Supabase containers
+
+Usage:
+  supabase test [command]
+
+Available Commands:
+  db          Tests local database with pgTAP
+  new         Create a new test file
+```
+
+--------------------------------
+
+### Install @supabase/supabase-js via CDN
+
+Source: https://github.com/supabase/supabase/blob/master/apps/docs/spec/reference/javascript/v2/partials/installing.mdx
+
+Include the Supabase JavaScript client library directly in your HTML using a CDN link.
+
+```js
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+//or
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+```
+
+--------------------------------
+
+### Querying with Supabase PostgREST
+
+Source: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2022-03-29-graphql-now-available.mdx
+
+An example of fetching data using the Supabase PostgREST API.
+
+```jsx
+// using Supabase PostgREST
+
+const { data, error } = await supabase
+  .from('profile')
+  .select('id, username, bio, avatarUrl, website')
+```
+
+--------------------------------
+
+### Initialize the Supabase client
+
+Source: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/getting-started/quickstarts/reactjs.mdx
+
+Create a reusable Supabase client instance using `createClient` and environment variables.
+
+```javascript
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+
+export const supabase = createClient(supabaseUrl, supabasePublishableKey)
+```
+
+--------------------------------
+
+### Import Supabase createClient
+
+Source: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2021-03-11-using-supabase-replit.mdx
+
+Import the createClient method to initialize Supabase in your Replit project.
+
+```javascript
+const { createClient } = require('@supabase/supabase-js')
+```
+
+--------------------------------
+
+### Query data from Supabase
+
+Source: https://github.com/supabase/supabase/blob/master/examples/with-cloudflare-workers/README.md
+
+JavaScript code snippet to select all articles from a Supabase instance.
+
+```javascript
+const { data } = await supabase.from('articles').select('*')
+```
+
+--------------------------------
+
+### Configure Supabase credentials in .env
+
+Source: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/getting-started/quickstarts/flask.mdx
+
+Stores the Supabase project URL and publishable API key as environment variables.
+
+```text
+SUPABASE_URL=<SUBSTITUTE_SUPABASE_URL>
+SUPABASE_PUBLISHABLE_KEY=<SUBSTITUTE_SUPABASE_PUBLISHABLE_KEY>
+```
+
+--------------------------------
+
+### Import and initialize Supabase client
+
+Source: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2024-07-16-supabase-js-on-jsr.mdx
+
+Example of importing and initializing the Supabase client in a main.ts file.
+
+```js
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient('https://xyzcompany.supabase.co', 'public-anon-key')
+
+console.log('Supabase Instance: ', supabase)
+```
+
+--------------------------------
+
+### Define Supabase keys in local.properties
+
+Source: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/getting-started/tutorials/with-kotlin.mdx
+
+Store Supabase project credentials in local.properties at the root of the project. Do not commit this file to version control.
+
+```kotlin
+SUPABASE_PUBLISHABLE_KEY=YOUR_SUPABASE_PUBLISHABLE_KEY
+SUPABASE_URL=YOUR_SUPABASE_URL
+```
+
+--------------------------------
+
+### Initialize Supabase Project
+
+Source: https://github.com/supabase/supabase/blob/master/apps/docs/content/guides/ai-tools/byo-mcp.mdx
+
+Create a new directory and initialize a Supabase project structure.
+
+```bash
+mkdir my-mcp-server
+cd my-mcp-server
+supabase init
+```
+
+--------------------------------
+
+### Eject Supabase Stack
+
+Source: https://github.com/supabase/supabase/blob/master/apps/www/_blog/2021-03-31-supabase-cli.mdx
+
+Command to eject the Supabase stack for self-hosting, providing necessary configuration files.
+
+```bash
+supabase eject
+```

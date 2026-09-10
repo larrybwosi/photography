@@ -1,0 +1,538 @@
+### Updating border color for v4
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+HTML example showing how to explicitly specify a border color in v4.
+
+```html
+<div class="border border-gray-200 px-2 py-3 ...">
+  <!-- ... -->
+</div>
+```
+
+--------------------------------
+
+### Hover variant behavior in v4
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+In v4 we've updated the `hover` variant to only apply when the primary input device supports hover:
+
+```CSS
+@media (hover: hover) {
+  .hover\:underline:hover {
+    text-decoration: underline;
+  }
+}
+```
+
+--------------------------------
+
+### Customizing container utility in v4
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+CSS example showing how to customize the `container` utility using the `@utility` directive in v4.
+
+```css
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+```
+
+--------------------------------
+
+### Unsetting three-stop gradients in v4
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+HTML showing how to use `dark:via-none` to unset a three-stop gradient back to a two-stop gradient in v4.
+
+```html
+<div class="bg-linear-to-r from-red-500 via-orange-400 to-yellow-400 dark:via-none dark:from-blue-500 dark:to-teal-400">
+  <!-- ... -->
+</div>
+```
+
+--------------------------------
+
+### Using the important modifier in v4
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+HTML demonstrating the new syntax for the important modifier, placing `!` at the end of the class name.
+
+```html
+<div class="flex! bg-red-500! hover:bg-red-600/50!">
+  <!-- ... -->
+</div>
+```
+
+--------------------------------
+
+### Preserving v3 default ring width and color
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+CSS theme variables to preserve the v3 default ring width and color behavior in v4.
+
+```css
+@theme {
+  --default-ring-width: 3px;
+  --default-ring-color: var(--color-blue-500);
+}
+```
+
+--------------------------------
+
+### Adding explicit ring color for v4
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+HTML example showing how to add `ring-blue-500` to preserve v3 default ring color behavior.
+
+```html
+<button class="focus:ring-3 focus:ring-blue-500 ...">
+  <!-- ... -->
+</button>
+```
+
+--------------------------------
+
+### Preserving v3 default border color
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+CSS base styles to preserve the v3 default border color behavior in v4.
+
+```css
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+```
+
+--------------------------------
+
+### Updated shadow, radius, and blur scales
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+Example showing how to update shadow utilities from v3 to v4, specifically `shadow-sm` to `shadow-xs` and `shadow` to `shadow-sm`.
+
+```html
+<input class="shadow-sm" />
+<input class="shadow-xs" />
+
+<input class="shadow" />
+<input class="shadow-sm" />
+```
+
+--------------------------------
+
+### Composable Variants Example
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/blog/tailwindcss-v4-alpha/index.mdx
+
+Demonstrates how `group-*` can compose with `has-*` and `focus` variants in Tailwind CSS v4, allowing for more flexible and powerful selector combinations.
+
+```html
+<!-- [!code filename:index.html] -->
+<div class="group">
+  <div class="group-has-[&:focus]:opacity-100"> <!-- [!code --] -->
+  <div class="group-has-focus:opacity-100"> <!-- [!code ++] -->
+      <!-- ... -->
+    </div>
+  </div>
+</div>
+```
+
+--------------------------------
+
+### Replacing @tailwind directives with @import
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+In v4, replace `@tailwind` directives with a standard CSS `@import "tailwindcss"` statement.
+
+```css
+/* [!code filename:CSS] */
+/* [!code --:4] */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* [!code ++:2] */
+@import "tailwindcss";
+```
+
+--------------------------------
+
+### Renamed outline utility
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+Example showing how to update `outline-none` to `outline-hidden` in v4.
+
+```html
+<input class="focus:outline-none" />
+<input class="focus:outline-hidden" />
+```
+
+--------------------------------
+
+### Specifying the grid columns
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/grid-template-columns.mdx
+
+Example of using grid-cols-4 to create a grid with four equally sized columns.
+
+```html
+<!-- [!code classes:grid-cols-4] -->
+<div class="grid grid-cols-4 gap-4">
+  <div>01</div>
+  <!-- ... -->
+  <div>09</div>
+</div>
+```
+
+--------------------------------
+
+### Default ring width change
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+Example showing how to update the `ring` utility from v3 to v4, specifically `ring` to `ring-3`.
+
+```html
+<input class="ring ring-blue-500" />
+<input class="ring-3 ring-blue-500" />
+```
+
+--------------------------------
+
+### Vue component using <script setup>
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/blog/2022-05-23-headless-ui-v1-6-tailwind-ui-team-management/index.mdx
+
+Example of a Vue single-file component updated to use the new `<script setup>` syntax, demonstrating reduced boilerplate and automatic component registration.
+
+```html
+<template>
+  <Listbox as="div" v-model="selected">
+    <!-- ... -->
+  </Listbox>
+</template>
+
+<script setup>
+  import { ref } from "vue";
+  import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from "@headlessui/vue";
+  import { CheckIcon, SelectorIcon } from "@heroicons/vue/solid";
+
+  const people = [
+    { id: 1, name: "Wade Cooper" },
+    // ...
+  ];
+
+  const selected = ref(people[3]);
+</script>
+```
+
+--------------------------------
+
+### Install CLI package
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/blog/tailwindcss-v4-alpha/index.mdx
+
+Install the Tailwind CSS v4 alpha and the separate CLI package.
+
+```sh
+npm install tailwindcss@next @tailwindcss/cli@next
+```
+
+--------------------------------
+
+### Button.vue
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/compatibility.mdx
+
+Example of using CSS variables instead of `@apply` in a Vue component's scoped style block to improve build performance.
+
+```html
+<template>
+  <button><slot /></button>
+</template>
+
+<style scoped>
+  button {
+    background-color: var(--color-blue-500);
+  }
+</style>
+```
+
+--------------------------------
+
+### Renamed outline utility
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+Example showing how to update the `outline` utility usage from v3 to v4, specifically `outline outline-2` to `outline-2`.
+
+```html
+<input class="outline outline-2" />
+<input class="outline-2" />
+```
+
+--------------------------------
+
+### Button.vue
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/compatibility.mdx
+
+Example of importing global styles as reference to enable `@apply` in a Vue component's scoped style block.
+
+```html
+<template>
+  <button><slot /></button>
+</template>
+
+<style scoped>
+  @reference "../app.css";
+
+  button {
+    @apply bg-blue-500;
+  }
+</style>
+```
+
+--------------------------------
+
+### Install PostCSS plugin
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/blog/tailwindcss-v4-alpha/index.mdx
+
+Install the Tailwind CSS v4 alpha and the separate PostCSS plugin package.
+
+```sh
+npm install tailwindcss@next @tailwindcss/postcss@next
+```
+
+--------------------------------
+
+### Using CSS variables directly in Vue
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/upgrade-guide.mdx
+
+An alternative to @apply, demonstrating direct usage of CSS theme variables in a Vue component's style block for improved performance.
+
+```html
+<template>
+  <h1>Hello world!</h1>
+</template>
+
+<style>
+  h1 {
+    color: var(--text-red-500);
+  }
+</style>
+```
+
+--------------------------------
+
+### Using logical properties
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/docs/border-width.mdx
+
+Example demonstrating `border-s-4` with left-to-right and right-to-left text directions.
+
+```html
+<div dir="ltr">
+  <div class="border-s-4 ..."></div>
+</div>
+<div dir="rtl">
+  <div class="border-s-4 ..."></div>
+</div>
+```
+
+--------------------------------
+
+### Payment method selection using :has()
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/blog/tailwindcss-v3-4/index.mdx
+
+A complete HTML example demonstrating how to style parent labels based on the checked state of child radio inputs using the new `:has()` variant.
+
+```html
+<fieldset class="grid gap-4">
+  <legend class="sr-only">Payment method</legend>
+  <div class="space-y-4">
+    <label
+      htmlFor="apple"
+      class="grid grid-cols-[24px_1fr_auto] items-center gap-6 rounded-lg p-4 text-slate-700 ring-2 ring-transparent hover:bg-slate-100 has-[:checked]:bg-indigo-50 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-500"
+    >
+      <svg class="w-8" viewBox="0 0 24 13" fill="none">
+              <path d="M4.38526 1.86704C4.10401 2.19606 3.65392 2.45565 3.20387 2.41854C3.14762 1.97367 3.36793 1.50091 3.62579 1.20892C3.90704 0.870635 4.39932 0.62962 4.79781 0.611084C4.84468 1.07453 4.66182 1.52871 4.38526 1.86704ZM4.79312 2.50663C4.14146 2.46956 3.5836 2.87272 3.27418 2.87272C2.96012 2.87272 2.48659 2.52517 1.97092 2.53443C1.30056 2.5437 0.677025 2.91906 0.33479 3.51694C-0.368428 4.71265 0.151978 6.48308 0.831712 7.45632C1.16457 7.9383 1.56306 8.46662 2.0881 8.44809C2.58507 8.42955 2.78195 8.12834 3.38204 8.12834C3.98677 8.12834 4.16026 8.44809 4.68531 8.43882C5.2291 8.42955 5.57134 7.95688 5.9042 7.47485C6.28388 6.92799 6.43862 6.39499 6.44799 6.36718C6.43862 6.35791 5.3979 5.96402 5.38853 4.77753C5.37915 3.78576 6.20893 3.31304 6.24643 3.28524C5.77759 2.59931 5.04629 2.52517 4.79312 2.50663ZM8.55765 1.16258V8.38789H9.69212V5.91768H11.2626C12.6971 5.91768 13.7051 4.94445 13.7051 3.53552C13.7051 2.12664 12.7159 1.16262 11.3001 1.16262H8.5576L8.55765 1.16258ZM9.69212 2.10806H11.0001C11.9846 2.10806 12.5471 2.62711 12.5471 3.54011C12.5471 4.4531 11.9846 4.97684 10.9954 4.97684H9.69212V2.10806ZM15.7772 8.44345C16.4898 8.44345 17.1508 8.08664 17.4508 7.52119H17.4743V8.38785H18.5244V4.79143C18.5244 3.74868 17.6806 3.07666 16.3819 3.07666C15.1771 3.07666 14.2864 3.75795 14.2536 4.69412H15.2756C15.36 4.24921 15.7771 3.95722 16.3491 3.95722C17.043 3.95722 17.4321 4.27701 17.4321 4.86562V5.26415L16.0163 5.34756C14.6989 5.42634 13.9864 5.95934 13.9864 6.88629C13.9864 7.82245 14.7224 8.44345 15.7772 8.44345ZM16.0819 7.58607C15.4772 7.58607 15.0927 7.29876 15.0927 6.85844C15.0927 6.4043 15.4631 6.14012 16.171 6.09841L17.4321 6.01963V6.42743C17.4321 7.10408 16.8508 7.58607 16.0819 7.58607H16.0819ZM19.9261 10.3529C21.0325 10.3529 21.5529 9.93584 22.0076 8.67057L24 3.14617H22.8467L21.5107 7.41456H21.4872L20.1511 3.14617H18.9651L20.8871 8.40638L20.784 8.72618C20.6106 9.2684 20.3293 9.47698 19.8277 9.47698C19.7386 9.47698 19.5652 9.46771 19.4948 9.45844V10.3251C19.5604 10.3436 19.8417 10.3529 19.9261 10.3529Z" />
+            </svg>
+            Apple Pay
+            <input name="payment_method" id="google" value="apple" type="radio" className="accent-indigo-500" />
+          </label>
+          <label
+            htmlFor="credit-card"
+            class="grid grid-cols-[24px_1fr_auto] items-center gap-6 rounded-lg p-4 text-slate-700 ring-2 ring-transparent hover:bg-slate-100 has-[:checked]:bg-indigo-50 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-500"
+          >
+            <svg class="w-8" viewBox="0 0 24 13" fill="none">
+              <rect stroke="currentColor" x="0.5" y="0.5" width="23" height="11" rx="1.5" />
+              <path
+                fill="currentColor"
+                d="M16.539 3.18591C16.0742 3.01652 15.5828 2.93152 15.088 2.93491C13.488 2.93491 12.358 3.74091 12.35 4.89791C12.34 5.74791 13.153 6.22691 13.768 6.51091C14.399 6.80291 14.61 6.98691 14.608 7.24791C14.604 7.64491 14.104 7.82491 13.639 7.82491C13 7.82491 12.651 7.73591 12.114 7.51291L11.915 7.41991L11.688 8.75191C12.077 8.91391 12.778 9.05291 13.502 9.06491C15.203 9.06491 16.315 8.26391 16.328 7.03291C16.342 6.35391 15.902 5.84091 14.976 5.41691C14.413 5.14191 14.064 4.95791 14.064 4.67891C14.064 4.43191 14.363 4.16791 14.988 4.16791C15.404 4.15785 15.8174 4.23589 16.201 4.39691L16.351 4.46391L16.578 3.17691L16.539 3.18591ZM20.691 3.04291H19.441C19.052 3.04291 18.759 3.14991 18.589 3.53591L16.185 8.98191H17.886L18.226 8.08891L20.302 8.09091C20.351 8.29991 20.501 8.98191 20.501 8.98191H22.001L20.691 3.04291ZM10.049 2.99291H11.67L10.656 8.93491H9.03705L10.049 2.99091V2.99291ZM5.93405 6.26791L6.10205 7.09291L7.68605 3.04291H9.40305L6.85205 8.97391H5.13905L3.73905 3.95191C3.71637 3.8691 3.66312 3.79798 3.59005 3.75291C3.08545 3.49225 2.55079 3.29444 1.99805 3.16391L2.02005 3.03891H4.62905C4.98305 3.05291 5.26805 3.16391 5.36305 3.54191L5.93305 6.27091L5.93405 6.26791ZM18.691 6.87391L19.337 5.21191C19.329 5.22991 19.47 4.86891 19.552 4.64591L19.663 5.15891L20.038 6.87291H18.69L18.691 6.87391Z"
+              />
+            </svg>
+            Credit Card
+            <input
+              name="payment_method"
+              id="credit-card"
+              value="credit-card"
+              type="radio"
+              className="accent-indigo-500"
+            />
+          </label>
+        </div>
+      </fieldset>
+```
+
+--------------------------------
+
+### Install Tailwind CSS v4 Alpha and Vite plugin
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/blog/tailwindcss-v4-alpha/index.mdx
+
+Command to install the alpha version of Tailwind CSS and its Vite plugin.
+
+```sh
+npm install tailwindcss@next @tailwindcss/vite@next
+```
+
+--------------------------------
+
+### Dynamic Viewport Height Example
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/blog/tailwindcss-v3-4/index.mdx
+
+An HTML snippet demonstrating the use of the `h-dvh` utility class for dynamic viewport height.
+
+```html
+<!-- [!code word:h-dvh] -->
+<div class="h-dvh">
+  <!-- ... -->
+</div>
+```
+
+--------------------------------
+
+### Using size-* utilities
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/blog/tailwindcss-v3-4/index.mdx
+
+Comparison of h- and w- utilities versus the new size-* utility for setting width and height.
+
+```html
+<!-- [!code filename:HTML] -->
+<div>
+  <img class="h-10 w-10" ...> <!-- [!code --] -->
+  <img class="h-12 w-12" ...> <!-- [!code --] -->
+  <img class="h-14 w-14" ...> <!-- [!code --] -->
+  <!-- [!code word:size-10] -->
+  <img class="size-10" ...> <!-- [!code ++] -->
+  <!-- [!code word:size-12] -->
+  <img class="size-12" ...> <!-- [!code ++] -->
+  <!-- [!code word:size-14] -->
+  <img class="size-14" ...> <!-- [!code ++] -->
+</div>
+```
+
+--------------------------------
+
+### Subgrid support
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/blog/tailwindcss-v3-4/index.mdx
+
+Example demonstrating `grid-cols-subgrid` for aligning items in dropdown menus with icons.
+
+```html
+<!-- [!code filename:HTML] -->
+<div role="menu" class="grid grid-cols-[auto_1fr]">
+  <!-- [!code word:grid-cols-subgrid] -->
+  <a href="#" class="col-span-2 grid-cols-subgrid">
+    <svg class="mr-2">...</svg>
+    <span class="col-start-2">Account</span>
+  </a>
+  <a href="#" class="col-span-2 grid-cols-subgrid">
+    <svg class="mr-2">...</svg>
+    <span class="col-start-2">Settings</span>
+  </a>
+  <a href="#" class="col-span-2 grid-cols-subgrid">
+    <span class="col-start-2">Sign out</span>
+  </a>
+</div>
+```
+
+--------------------------------
+
+### Install Headless UI for Vue
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/blog/headless-ui-v1-4/index.mdx
+
+Command to install Headless UI for Vue using npm.
+
+```bash
+npm install @headlessui/vue
+```
+
+--------------------------------
+
+### Vue.js Transition Component Example
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/blog/utility-friendly-transitions-with-tailwindui-react/index.mdx
+
+An example of Vue.js's <transition> component for enter/leave transitions with a utility-friendly API.
+
+```html
+<transition
+  enter-active-class="transition-opacity duration-75"
+  enter-from-class="opacity-0"
+  enter-to-class="opacity-100"
+  leave-active-class="transition-opacity duration-150"
+  leave-from-class="opacity-100"
+  leave-to-class="opacity-0"
+>
+  <div v-show="isShowing">
+    <!-- Will fade in and out -->
+  </div>
+</transition>
+```
+
+--------------------------------
+
+### Simplified :has() variant usage
+
+Source: https://github.com/tailwindlabs/tailwindcss.com/blob/main/src/blog/tailwindcss-v3-4/index.mdx
+
+A simplified HTML snippet highlighting the application of `:has()` variants to style a label when its child input is checked.
+
+```html
+<!-- [!code word:has-[\]:checked\]:ring-indigo-500] -->
+<!-- [!code word:has-[\]:checked\]:text-indigo-900] -->
+<!-- [!code word:has-[\]:checked\]:bg-indigo-50] -->
+<label class="has-[:checked]:bg-indigo-50 has-[:checked]:text-indigo-900 has-[:checked]:ring-indigo-500 ...">
+  <svg fill="currentColor">
+    <!-- ... -->
+  </svg>
+  Google Pay
+  <input type="radio" class="accent-indigo-500 ..." />
+</label>
+```
