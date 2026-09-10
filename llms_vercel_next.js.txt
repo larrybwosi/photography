@@ -1,0 +1,1036 @@
+### Initialize the Next.js application instance
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/custom-server.mdx
+
+Import and call next to programmatically create a Next.js application instance.
+
+```javascript
+import next from 'next'
+
+const app = next({})
+```
+
+--------------------------------
+
+### Configure @next/eslint-plugin-next directly in eslint.config.mjs
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/03-api-reference/05-config/03-eslint.mdx
+
+Applies Next.js recommended rules directly to avoid conflicts with custom parsers, resolvers, or existing plugins.
+
+```javascript
+import { defineConfig } from 'eslint/config'
+import nextPlugin from '@next/eslint-plugin-next'
+
+const eslintConfig = defineConfig([
+  // Your other configurations...
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      '@next/next': nextPlugin,
+    },
+    rules: {
+      ...nextPlugin.configs.recommended.rules,
+    },
+  },
+])
+
+export default eslintConfig
+```
+
+--------------------------------
+
+### Implement search form navigation in Next.js App Router
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/03-api-reference/02-components/form.mdx
+
+Imports next/form to perform client-side navigation and append form input values to URL search parameters on submission.
+
+```tsx
+import Form from 'next/form'
+
+export default function Page() {
+  return (
+    <Form action="/search">
+      {/* On submission, the input value will be appended to
+          the URL, e.g. /search?query=abc */}
+      <input name="query" />
+      <button type="submit">Submit</button>
+    </Form>
+  )
+}
+```
+
+```jsx
+import Form from 'next/form'
+
+export default function Search() {
+  return (
+    <Form action="/search">
+      {/* On submission, the input value will be appended to
+          the URL, e.g. /search?query=abc */}
+      <input name="query" />
+      <button type="submit">Submit</button>
+    </Form>
+  )
+}
+```
+
+--------------------------------
+
+### Performing mutations with the Form component in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/03-api-reference/02-components/form.mdx
+
+Pass a Server Action directly to the `action` prop of `<Form>` to handle mutations. Note that shared UI cannot be automatically prefetched when the destination is dynamic.
+
+```tsx
+import Form from 'next/form'
+import { createPost } from '@/posts/actions'
+
+export default function Page() {
+  return (
+    <Form action={createPost}>
+      <input name="title" />
+      {/* ... */}
+      <button type="submit">Create Post</button>
+    </Form>
+  )
+}
+```
+
+```jsx
+import Form from 'next/form'
+import { createPost } from '@/posts/actions'
+
+export default function Page() {
+  return (
+    <Form action={createPost}>
+      <input name="title" />
+      {/* ... */}
+      <button type="submit">Create Post</button>
+    </Form>
+  )
+}
+```
+
+--------------------------------
+
+### Define dynamic generateViewport function in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/03-api-reference/04-functions/generate-viewport.mdx
+
+Export a `generateViewport` function to dynamically return a `Viewport` object. Use this when viewport options depend on request information.
+
+```tsx
+export function generateViewport({ params }) {
+  return {
+    themeColor: '...',}
+}
+```
+
+```jsx
+export function generateViewport({ params }) {
+  return {
+    themeColor: '...',}
+}
+```
+
+--------------------------------
+
+### ECMAScript Module Configuration with next.config.mjs
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/03-api-reference/05-config/01-next-config-js/index.mdx
+
+Use `next.config.mjs` to define your Next.js configuration if your project requires ECMAScript modules.
+
+```js
+// @ts-check
+
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
+  /* config options here */
+}
+
+export default nextConfig
+```
+
+--------------------------------
+
+### Link to Dynamic Paths with URL Object in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/02-pages/03-building-your-application/01-routing/03-linking-and-navigating.mdx
+
+Provide a URL object to the `href` prop of the `Link` component for navigating to dynamic routes. Specify the page path in `pathname` and dynamic segments in the `query` object.
+
+```jsx
+import Link from 'next/link'
+
+function Posts({ posts }) {
+  return (
+    <ul>
+      {posts.map((post) => (
+        <li key={post.id}>
+          <Link
+            href={{
+              pathname: '/blog/[slug]',
+              query: { slug: post.slug },
+            }}
+          >
+            {post.title}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+export default Posts
+```
+
+--------------------------------
+
+### Link to Dynamic Paths with String Interpolation in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/02-pages/03-building-your-application/01-routing/03-linking-and-navigating.mdx
+
+Use string interpolation within the `href` prop of the `Link` component to navigate to dynamic route segments. Ensure dynamic parts are URL-encoded for compatibility.
+
+```jsx
+import Link from 'next/link'
+
+function Posts({ posts }) {
+  return (
+    <ul>
+      {posts.map((post) => (
+        <li key={post.id}>
+          <Link href={`/blog/${encodeURIComponent(post.slug)}`}>
+            {post.title}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+export default Posts
+```
+
+--------------------------------
+
+### Upgrade Next.js application
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/upgrading/codemods.mdx
+
+Automatically update Next.js, React, and React DOM versions along with applying relevant codemods.
+
+```bash
+npx @next/codemod upgrade [revision]
+```
+
+--------------------------------
+
+### Load Layout-Specific Third-Party Script in Next.js App Router
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/scripts.mdx
+
+Use `next/script` within a layout component to load a third-party script for specific routes and their nested routes. The script loads only once per layout.
+
+```tsx
+import Script from 'next/script'
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <>
+      <section>{children}</section>
+      <Script src="https://example.com/script.js" />
+    </>
+  )
+}
+```
+
+```jsx
+import Script from 'next/script'
+
+export default function DashboardLayout({ children }) {
+  return (
+    <>
+      <section>{children}</section>
+      <Script src="https://example.com/script.js" />
+    </>
+  )
+}
+```
+
+--------------------------------
+
+### Define loading UI in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/01-getting-started/06-fetching-data.mdx
+
+Place this loading file in a route directory to automatically stream the entire route segment wrapped inside a Suspense boundary.
+
+```tsx
+export default function Loading() {
+  // Define the Loading UI here
+  return <div>Loading...</div>
+}
+```
+
+```jsx
+export default function Loading() {
+  // Define the Loading UI here
+  return <div>Loading...</div>
+}
+```
+
+--------------------------------
+
+### Define Server Functions at the file level in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/03-api-reference/01-directives/use-server.mdx
+
+Place 'use server' at the top of a file to ensure all exported functions execute strictly on the server.
+
+```tsx
+'use server'
+import { db } from '@/lib/db' // Your database client
+import { auth } from '@/lib/auth'
+
+export async function createUser(data: { name: string; email: string }) {
+  const session = await auth()
+  if (!session?.user) {
+    throw new Error('Unauthorized')
+  }
+
+  const user = await db.user.create({ data })
+  return { id: user.id, name: user.name }
+}
+```
+
+```jsx
+'use server'
+import { db } from '@/lib/db' // Your database client
+import { auth } from '@/lib/auth'
+
+export async function createUser(data) {
+  const session = await auth()
+  if (!session?.user) {
+    throw new Error('Unauthorized')
+  }
+
+  const user = await db.user.create({ data })
+  return { id: user.id, name: user.name }
+}
+```
+
+--------------------------------
+
+### Define assets metadata in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/03-api-reference/04-functions/generate-metadata.mdx
+
+Specify asset link elements within page metadata.
+
+```jsx
+export const metadata = {
+  assets: ['https://nextjs.org/assets'],
+}
+```
+
+```html
+<link rel="assets" href="https://nextjs.org/assets" />
+```
+
+--------------------------------
+
+### Configure Next.js for Offline Support
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/offline-support.mdx
+
+Enable experimental offline support and partial prefetching in your configuration file.
+
+```ts
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+  cacheComponents: true,
+  partialPrefetching: true,
+  experimental: {
+    useOffline: true,
+  },
+}
+
+export default nextConfig
+```
+
+```js
+module.exports = {
+  cacheComponents: true,
+  partialPrefetching: true,
+  experimental: {
+    useOffline: true,
+  },
+}
+```
+
+--------------------------------
+
+### Handle form submission with Server Actions in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/forms.mdx
+
+Pass an inline Server Action with 'use server' directly to the form's action attribute to receive and parse FormData. Always verify authentication and authorization within the Server Action.
+
+```tsx
+import { auth } from '@/lib/auth'
+
+export default function Page() {
+  async function createInvoice(formData: FormData) {
+    'use server'
+
+    const session = await auth()
+    if (!session?.user) {
+      throw new Error('Unauthorized')
+    }
+
+    const rawFormData = {
+      customerId: formData.get('customerId'),
+      amount: formData.get('amount'),
+      status: formData.get('status'),
+    }
+
+    // mutate data
+    // revalidate the cache
+  }
+
+  return <form action={createInvoice}>...</form>
+}
+```
+
+```jsx
+import { auth } from '@/lib/auth'
+
+export default function Page() {
+  async function createInvoice(formData) {
+    'use server'
+
+    const session = await auth()
+    if (!session?.user) {
+      throw new Error('Unauthorized')
+    }
+
+    const rawFormData = {
+      customerId: formData.get('customerId'),
+      amount: formData.get('amount'),
+      status: formData.get('status'),
+    }
+
+    // mutate data
+    // revalidate the cache
+  }
+
+  return <form action={createInvoice}>...</form>
+}
+```
+
+--------------------------------
+
+### Create an instant navigation dynamic page in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/instant-navigation.mdx
+
+Wraps dynamic asynchronous components in Suspense boundaries while using cached data helpers to keep navigation instant without static pre-generation.
+
+```tsx
+import { Suspense } from 'react'
+import { db } from '@/lib/db'
+
+export default function ProductPage(props: PageProps<'/store/[slug]'>) {
+  return (
+    <div>
+      <Suspense fallback={<p>Loading product...</p>}>
+        <ProductInfo params={props.params} />
+      </Suspense>
+      <Suspense fallback={<p>Checking availability...</p>}>
+        <Inventory params={props.params} />
+      </Suspense>
+    </div>
+  )
+}
+
+type Params = PageProps<'/store/[slug]'>['params']
+
+async function ProductInfo({ params }: { params: Params }) {
+  const { slug } = await params
+  const product = await getProduct(slug)
+  return (
+    <>
+      <h1>{product.name}</h1>
+      <p>${product.price}</p>
+    </>
+  )
+}
+
+async function getProduct(slug: string) {
+  'use cache'
+  return db.products.findBySlug(slug)
+}
+
+async function Inventory({ params }: { params: Params }) {
+  const { slug } = await params
+  const item = await db.inventory.findBySlug(slug)
+  return <p>{item.count} in stock</p>
+}
+```
+
+--------------------------------
+
+### <Link>
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/03-api-reference/02-components/link.mdx
+
+The Next.js Link component enables client-side transitions between routes. Configure props such as replace and scroll to customize navigation and scrolling behavior.
+
+```APIDOC
+## Link
+
+### Description
+A React component that extends the HTML `<a>` element to provide prefetching and client-side navigation between routes.
+
+### Props
+- **replace** (boolean) - Optional - Defaults to `false`. When `true`, `next/link` will replace the current history state instead of adding a new URL into the browser's history stack.
+- **scroll** (boolean) - Optional - Defaults to `true`. When `true`, Next.js maintains scroll position or scrolls to the top of the first visible Page element. When `false`, Next.js will not attempt to scroll to the first Page element.
+
+### Usage Example
+```tsx
+import Link from 'next/link'
+
+export default function Page() {
+  return (
+    <>
+      <Link href="/dashboard" replace>
+        Dashboard (Replace History)
+      </Link>
+      <Link href="/dashboard" scroll={false}>
+        Dashboard (Disable Scroll Reset)
+      </Link>
+    </>
+  )
+}
+```
+```
+
+--------------------------------
+
+### Avoid Dynamic Lookups for Environment Variables in JavaScript
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/environment-variables.mdx
+
+Next.js will not inline environment variables accessed via dynamic keys or re-assigned process.env references.
+
+```javascript
+// This will NOT be inlined, because it uses a variable
+const varName = 'NEXT_PUBLIC_ANALYTICS_ID'
+setupAnalyticsService(process.env[varName])
+
+// This will NOT be inlined, because it uses a variable
+const env = process.env
+setupAnalyticsService(env.NEXT_PUBLIC_ANALYTICS_ID)
+```
+
+--------------------------------
+
+### Dynamically Import Named Export in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/lazy-loading.mdx
+
+Use `next/dynamic` to import a named export from a module. The component is returned from the Promise after the import resolves.
+
+```jsx
+export function Hello() {
+  return <p>Hello!</p>
+}
+
+// pages/index.js
+import dynamic from 'next/dynamic'
+
+const DynamicComponent = dynamic(() =>
+  import('../components/hello').then((mod) => mod.Hello)
+)
+```
+
+--------------------------------
+
+### Upgrade Next.js to Version 10
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/02-pages/02-guides/upgrading/version-10.mdx
+
+Use these commands to upgrade your Next.js application to version 10 using various package managers. If you are using TypeScript, ensure you also upgrade `@types/react` and `@types/react-dom` to their corresponding versions.
+
+```bash
+npm i next@10
+```
+
+```bash
+yarn add next@10
+```
+
+```bash
+pnpm up next@10
+```
+
+```bash
+bun add next@10
+```
+
+--------------------------------
+
+### Navigate between routes using Next.js Link component
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/01-getting-started/03-layouts-and-pages.mdx
+
+Use the Link component with an href prop to enable client-side navigation and automatic route prefetching. Works in both Server and Client Components.
+
+```tsx
+import Link from 'next/link'
+import { getPosts } from '@/lib/posts'
+
+export default async function Posts() {
+  const posts = await getPosts()
+
+  return (
+    <ul>
+      {posts.map((post) => (
+        <li key={post.slug}>
+          <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+```
+
+```jsx
+import Link from 'next/link'
+import { getPosts } from '@/lib/posts'
+
+export default async function Posts() {
+  const posts = await getPosts()
+
+  return (
+    <ul>
+      {posts.map((post) => (
+        <li key={post.slug}>
+          <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+```
+
+--------------------------------
+
+### Executing Server Action and redirecting in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/03-api-reference/02-components/form.mdx
+
+Use `'use server'` to define a Server Action and call `redirect()` to navigate to the newly created resource. Forms cannot automatically prefetch shared UI before the action completes.
+
+```tsx
+'use server'
+import { redirect } from 'next/navigation'
+
+export async function createPost(formData: FormData) {
+  // Create a new post
+  // ...
+
+  // Redirect to the new post
+  redirect(`/posts/${data.id}`)
+}
+```
+
+```jsx
+'use server'
+import { redirect } from 'next/navigation'
+
+export async function createPost(formData) {
+  // Create a new post
+  // ...
+
+  // Redirect to the new post
+  redirect(`/posts/${data.id}`)
+}
+```
+
+--------------------------------
+
+### Render a wrapped Client Component in a Server Component in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/01-getting-started/05-server-and-client-components.mdx
+
+Import and use the wrapped Client Component inside a Server Component without triggering client-only feature errors.
+
+```tsx
+import Carousel from './carousel'
+
+export default function Page() {
+  return (
+    <div>
+      <p>View pictures</p>
+      {/*  Works, since Carousel is a Client Component */}
+      <Carousel />
+    </div>
+  )
+}
+```
+
+```jsx
+import Carousel from './carousel'
+
+export default function Page() {
+  return (
+    <div>
+      <p>View pictures</p>
+      {/*  Works, since Carousel is a Client Component */}
+      <Carousel />
+    </div>
+  )
+}
+```
+
+--------------------------------
+
+### Perform Shallow Client Routing with Browser History in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/single-page-applications.mdx
+
+Updates URL search parameters without triggering a full page reload or file-system navigation. Synchronizes state with useSearchParams.
+
+```tsx
+'use client'
+
+import { useSearchParams } from 'next/navigation'
+
+export default function SortProducts() {
+  const searchParams = useSearchParams()
+
+  function updateSorting(sortOrder: string) {
+    const urlSearchParams = new URLSearchParams(searchParams.toString())
+    urlSearchParams.set('sort', sortOrder)
+    window.history.pushState(null, '', `?${urlSearchParams.toString()}`)
+  }
+
+  return (
+    <>
+      <button onClick={() => updateSorting('asc')}>Sort Ascending</button>
+      <button onClick={() => updateSorting('desc')}>Sort Descending</button>
+    </>
+  )
+}
+```
+
+```jsx
+'use client'
+
+import { useSearchParams } from 'next/navigation'
+
+export default function SortProducts() {
+  const searchParams = useSearchParams()
+
+  function updateSorting(sortOrder) {
+    const urlSearchParams = new URLSearchParams(searchParams.toString())
+    urlSearchParams.set('sort', sortOrder)
+    window.history.pushState(null, '', `?${urlSearchParams.toString()}`)
+  }
+
+  return (
+    <>
+      <button onClick={() => updateSorting('asc')}>Sort Ascending</button>
+      <button onClick={() => updateSorting('desc')}>Sort Descending</button>
+    </>
+  )
+}
+```
+
+--------------------------------
+
+### Load Application-Wide Third-Party Script in Next.js Pages Router
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/scripts.mdx
+
+Include `next/script` in the custom `_app.js` file to load a third-party script for all routes in a Pages Router application. The script loads only once.
+
+```jsx
+import Script from 'next/script'
+
+export default function MyApp({ Component, pageProps }) {
+  return (
+    <>
+      <Component {...pageProps} />
+      <Script src="https://example.com/script.js" />
+    </>
+  )
+}
+```
+
+--------------------------------
+
+### Implement JSON-LD for Product Page in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/json-ld.mdx
+
+Render structured product data as a native <script> tag in a Next.js page component. Includes XSS prevention by escaping < characters.
+
+```tsx
+export default async function Page({ params }) {
+  const { id } = await params
+  const product = await getProduct(id)
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: product.image,
+    description: product.description,
+  }
+
+  return (
+    <section>
+      {/* Add JSON-LD to your page */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, '\u003c'),
+        }}
+      />
+      {/* ... */}
+    </section>
+  )
+}
+```
+
+```jsx
+export default async function Page({ params }) {
+  const { id } = await params
+  const product = await getProduct(id)
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: product.image,
+    description: product.description,
+  }
+
+  return (
+    <section>
+      {/* Add JSON-LD to your page */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, '\u003c'),
+        }}
+      />
+      {/* ... */}
+    </section>
+  )
+}
+```
+
+--------------------------------
+
+### Integrate Error Boundary into Next.js _app.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/02-pages/03-building-your-application/06-configuring/12-error-handling.mdx
+
+Import and wrap the `Component` prop in `pages/_app.js` with the `ErrorBoundary` component to apply client-side error handling across your Next.js application.
+
+```jsx
+// Import the ErrorBoundary component
+import ErrorBoundary from '../components/ErrorBoundary'
+
+function MyApp({ Component, pageProps }) {
+  return (
+    // Wrap the Component prop with ErrorBoundary component
+    <ErrorBoundary>
+      <Component {...pageProps} />
+    </ErrorBoundary>
+  )
+}
+
+export default MyApp
+```
+
+--------------------------------
+
+### Run Next.js Build Command
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/building.mdx
+
+Execute the build process for your Next.js application using the command specific to your package manager.
+
+```bash
+pnpm build
+```
+
+```bash
+npm run build
+```
+
+```bash
+yarn build
+```
+
+```bash
+bun run build
+```
+
+--------------------------------
+
+### Create a theme-aware image component in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/03-api-reference/02-components/image.mdx
+
+Renders dual Image components toggled via CSS; keep default loading="lazy" so only the visible image is fetched.
+
+```tsx
+import styles from './theme-image.module.css'
+import Image, { ImageProps } from 'next/image'
+
+type Props = Omit<ImageProps, 'src' | 'preload' | 'loading'> & {
+  srcLight: string
+  srcDark: string
+}
+
+const ThemeImage = (props: Props) => {
+  const { srcLight, srcDark, ...rest } = props
+
+  return (
+    <>
+      <Image {...rest} src={srcLight} className={styles.imgLight} />
+      <Image {...rest} src={srcDark} className={styles.imgDark} />
+    </>
+  )
+}
+```
+
+```jsx
+import styles from './theme-image.module.css'
+import Image from 'next/image'
+
+const ThemeImage = (props) => {
+  const { srcLight, srcDark, ...rest } = props
+
+  return (
+    <>
+      <Image {...rest} src={srcLight} className={styles.imgLight} />
+      <Image {...rest} src={srcDark} className={styles.imgDark} />
+    </>
+  )
+}
+```
+
+--------------------------------
+
+### Define static viewport object in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/03-api-reference/04-functions/generate-viewport.mdx
+
+Export a `viewport` object from `layout.jsx` or `page.jsx` to customize the initial viewport. This is supported only in Server Components.
+
+```tsx
+import type { Viewport } from 'next'
+
+export const viewport: Viewport = {
+  themeColor: 'black',
+}
+
+export default function Page() {}
+```
+
+```jsx
+export const viewport = {
+  themeColor: 'black',
+}
+
+export default function Page() {}
+```
+
+--------------------------------
+
+### Create a page in Next.js
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/01-getting-started/03-layouts-and-pages.mdx
+
+Default export a React component from a page file within the app directory to render UI for a specific route.
+
+```tsx
+export default function Page() {
+  return <h1>Hello Next.js!</h1>
+}
+```
+
+```jsx
+export default function Page() {
+  return <h1>Hello Next.js!</h1>
+}
+```
+
+--------------------------------
+
+### Load Application-Wide Third-Party Script in Next.js App Router
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/02-guides/scripts.mdx
+
+Include `next/script` in the root layout to load a third-party script for all routes in an App Router application. The script loads only once.
+
+```tsx
+import Script from 'next/script'
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+      <Script src="https://example.com/script.js" />
+    </html>
+  )
+}
+```
+
+```jsx
+import Script from 'next/script'
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+      <Script src="https://example.com/script.js" />
+    </html>
+  )
+}
+```
+
+--------------------------------
+
+### Run Next.js with Webpack via CLI
+
+Source: https://github.com/vercel/next.js/blob/canary/docs/01-app/03-api-reference/08-turbopack.mdx
+
+Use the --webpack flag on platforms lacking native Turbopack bindings or when falling back from WASM bindings.
+
+```bash
+next dev --webpack
+next build --webpack
+```
